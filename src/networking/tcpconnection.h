@@ -9,6 +9,7 @@ class TcpConnection
 {
 public:
     TcpConnection(tcp::socket socket);
+    ~TcpConnection();
 
     tcp::socket& getSocket() { return socket_; }
 private:

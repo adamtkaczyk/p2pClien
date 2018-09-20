@@ -1,14 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
-if(NOT DEFINED CMAKE_C_COMPILER)
-  SET(CMAKE_C_COMPILER /home/adamtkaczyk/project/gcc-8.1.0/objdir/bin/gcc)
-endif()
-
-if(NOT DEFINED CMAKE_CXX_COMPILER)
-  SET(CMAKE_CXX_COMPILER /home/adamtkaczyk/project/gcc-8.1.0/objdir/bin/g++)
-endif()
-
 SET(CMAKE_BUILD_TYPE Debug)
+
 project(P2PClient)
 
 include_directories("/home/adamtkaczyk/project/googletest-master/googletest/include/")
@@ -22,7 +15,11 @@ find_package(Boost COMPONENTS system REQUIRED)
 
 add_executable(${PROJECT_NAME} "src/p2pnodeapp.cpp" 
 	                       "src/p2pnode.cpp" 
-			       "src/p2pnode.h" 
+                               "src/p2pnode.h"
+                               "src/remotenode.cpp"
+                               "src/remotenode.h"
+                               "src/sessionmanager.cpp"
+                               "src/sessionmanager.h"
 			       "src/networking/tcpserver.cpp" 
 			       "src/networking/tcpserver.h"
 			       "src/networking/tcpconnection.cpp"
@@ -34,4 +31,4 @@ target_link_libraries (${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries (${PROJECT_NAME} ${Boost_SYSTEM_LIBRARY})
 target_link_libraries (${PROJECT_NAME}_test ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries (${PROJECT_NAME}_test "/home/adamtkaczyk/project/googletest-master/build/googlemock/gtest/libgtest.a"
-                                      "/home/adamtkaczyk/project/googletest-master/build/googlemock/gtest/libgtest_main.a")
+                                            "/home/adamtkaczyk/project/googletest-master/build/googlemock/gtest/libgtest_main.a")

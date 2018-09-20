@@ -11,7 +11,7 @@ using boost::asio::ip::tcp;
 class TcpServer
 {
 public:
-    TcpServer(short port);
+    TcpServer(const short port);
 private:
     boost::asio::io_context ioContext_;
     tcp::acceptor acceptor_;
