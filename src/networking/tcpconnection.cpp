@@ -6,7 +6,7 @@ using namespace std;
 
 TcpConnection::TcpConnection(tcp::socket socket) : socket_(move(socket))
 {
-    socket_.send(boost::asio::buffer("New connection\n"));
+    socket_.send(boost::asio::buffer("New connection kurwa\n"));
 }
 
 TcpConnection::~TcpConnection()

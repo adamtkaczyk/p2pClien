@@ -2,6 +2,7 @@
 #define TCPSERVER_H
 
 #include "tcpconnection.h"
+#include "datastruct/blockingqueue.h"
 
 #include <memory>
 #include <boost/asio.hpp>
@@ -15,6 +16,7 @@ public:
 private:
     boost::asio::io_context ioContext_;
     tcp::acceptor acceptor_;
+    BlockingQueue<TcpConnection>& connectionQueue_;
 
     void startAccept();
 };
