@@ -6,10 +6,10 @@
 
 using namespace std;
 
-TcpServer::TcpServer(const short port) : acceptor_(ioContext_, tcp::endpoint(tcp::v4(),port))
+TcpServer::TcpServer(const short port, RegisterFunction registerConnection)
+    : acceptor_(ioContext_, tcp::endpoint(tcp::v4(),port)), regsiterConnection_(registerConnection)
 {
     startAccept();
-    ioContext_.run();
 }
 
 void TcpServer::startAccept()
@@ -18,7 +18,7 @@ void TcpServer::startAccept()
     {
         auto connection = make_unique<TcpConnection>(move(socket));
         if(!error)
-            connectionQueue_.push(move(connection));
+            regsiterConnection_(move(connection));
         startAccept();
     });
 }
