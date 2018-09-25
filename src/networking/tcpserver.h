@@ -15,7 +15,10 @@ public:
     using RegisterFunction = std::function<void(std::unique_ptr<TcpConnection>)>;
 
     TcpServer(const short port, RegisterFunction registerConnection);
+    //start TCP server
     void run() { ioContext_.run(); }
+    //stop TCP server
+    void stop() { ioContext_.stop(); }
 private:
     boost::asio::io_context ioContext_;
     tcp::acceptor acceptor_;

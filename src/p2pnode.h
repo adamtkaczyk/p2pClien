@@ -14,17 +14,22 @@ public:
     ~P2PNode();
 
     void run();
+
+    void stop() {end_ = true;}
 private:
     SessionManager sessionManager_;
 
     std::thread serverThread_;
     std::unique_ptr<TcpServer> server_;
+    static bool end_;
 
     //TODO: data source
 
     //TODO: data destination
 
     //TODO: Routing table
+
+    static void signalHandler(int signal);
 };
 
 #endif // P2PNODE_H

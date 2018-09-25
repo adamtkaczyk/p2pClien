@@ -9,6 +9,7 @@ SessionManager::SessionManager()
 
 SessionManager::~SessionManager()
 {
+    cout << "Waiting for finishing all open session\n";
     for(auto& t : openThreads_)
         t.second.join();
 }
