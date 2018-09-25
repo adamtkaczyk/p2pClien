@@ -37,8 +37,9 @@ void P2PNode::run()
         //TODO: get data from input
         //TODO: send request
         //TODO: return result
+        sessionManager_.clearFinishedSessions();
         sleep(1);
-        cout << "run\n";
+        cout << "run " << sessionManager_.count() << " TCP session\n";
     }
 
     cout << "Finish P2PNode\n";

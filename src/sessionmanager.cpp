@@ -10,14 +10,14 @@ SessionManager::SessionManager()
 SessionManager::~SessionManager()
 {
     cout << "Waiting for finishing all open session\n";
-    for(auto& t : openThreads_)
-        t.second.join();
+    for(auto& t : openSessions_)
+        t.second.wait();
 }
 
 void SessionManager::createSession(std::unique_ptr<TcpConnection> tcpConnection)
 {
-    std::thread connectionThread([this, conn = move(tcpConnection)]() mutable { sessionThread(std::move(conn)); });
-    openThreads_["1"] = move(connectionThread);
+    auto future = std::async(std::launch::async, [this, conn = move(tcpConnection)]() mutable { sessionThread(std::move(conn)); });
+    openSessions_["1"] = move(future);
 }
 
 void SessionManager::sessionThread(std::unique_ptr<TcpConnection> tcpConnection)
@@ -26,5 +26,20 @@ void SessionManager::sessionThread(std::unique_ptr<TcpConnection> tcpConnection)
     {
         tcpConnection->send("Message\n");
         sleep(5);
+    }
+}
+
+void SessionManager::clearFinishedSessions()
+{
+    auto session = openSessions_.cbegin();
+    while(session != openSessions_.cend())
+    {
+        if(session->second.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+        {
+            cout << "Found finished thread\n";
+            session = openSessions_.erase(session);
+        }
+        else
+            session++;
     }
 }

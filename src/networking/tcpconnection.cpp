@@ -12,5 +12,5 @@ TcpConnection::TcpConnection(tcp::socket socket) : socket_(move(socket))
 TcpConnection::~TcpConnection()
 {
     socket_.close();
-    cout << "Koniec połączenia\n";
+    cout << "Finish TCP Connection\n";
 }
