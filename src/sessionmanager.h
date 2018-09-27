@@ -1,7 +1,7 @@
 #ifndef SESSIONMANAGER_H
 #define SESSIONMANAGER_H
 
-#include "networking/tcpconnection.h"
+#include "networking/p2pconnection.h"
 
 #include <thread>
 #include <future>
@@ -12,15 +12,15 @@ class SessionManager
 public:
     SessionManager();
     ~SessionManager();
-
-    void createSession(std::unique_ptr<TcpConnection> tcpConnection);
+    //methond start new session
+    void createSession(std::unique_ptr<P2PConnection> connection);
     //check and close all finished session
     void clearFinishedSessions();
     //return number od open session
     unsigned int count() const { return openSessions_.size(); }
 private:
     //session thread
-    void sessionThread(std::unique_ptr<TcpConnection> tcpConnection);
+    void sessionThread(std::unique_ptr<P2PConnection> connection);
     //map of all running thread
     std::unordered_map<std::string,std::future<void>> openSessions_;
 };

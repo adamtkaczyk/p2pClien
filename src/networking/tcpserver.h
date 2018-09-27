@@ -21,10 +21,11 @@ public:
     void stop() { ioContext_.stop(); }
 private:
     boost::asio::io_context ioContext_;
+    //acceptor for new input connection
     tcp::acceptor acceptor_;
     //function which register new TCP connection
     RegisterFunction regsiterConnection_;
-
+    //start waiting for new input connection
     void startAccept();
 };
 

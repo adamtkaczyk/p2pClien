@@ -16,7 +16,11 @@ add_executable(${PROJECT_NAME} "p2pnodeapp.cpp"
 			       "networking/tcpserver.cpp" 
 			       "networking/tcpserver.h"
 			       "networking/tcpconnection.cpp"
-			       "networking/tcpconnection.h")
+                               "networking/tcpconnection.h"
+                               "networking/p2pconnection.cpp"
+                               "networking/p2pconnection.h"
+                               "protocol/p2pmessage.cpp"
+                               "protocol/p2pmessage.h")
 
 
 target_link_libraries (${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})

@@ -19,6 +19,8 @@ void TcpServer::startAccept()
         auto connection = make_unique<TcpConnection>(move(socket));
         if(!error)
             regsiterConnection_(move(connection));
+        else
+            cout << "ERROR\n";
         startAccept();
     });
 }
