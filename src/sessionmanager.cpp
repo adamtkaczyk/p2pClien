@@ -27,7 +27,7 @@ void SessionManager::createSession(std::unique_ptr<P2PConnection> connection)
 
 void SessionManager::sessionThread(std::unique_ptr<P2PConnection> connection)
 {
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 4; i++)
     {
         //get input message from remote node
         auto message = connection->receive();
@@ -35,7 +35,7 @@ void SessionManager::sessionThread(std::unique_ptr<P2PConnection> connection)
         //TODO: Process message
 
         //send result
-        connection->send("Message\n");
+        connection->send("Result message\n");
         sleep(5);
     }
 }

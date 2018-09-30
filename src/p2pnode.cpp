@@ -10,7 +10,7 @@ bool P2PNode::end_ = false;
 P2PNode::P2PNode(const short port)
 {
     serverThread_ = std::thread([this,port](){
-        server_ = make_unique<TcpServer>(port, [this](std::unique_ptr<TcpConnection> conn) {sessionManager_.createSession(move(conn));});
+        server_ = make_unique<TcpServer>("0.0.0.0", port, [this](std::unique_ptr<TcpConnection> conn) {sessionManager_.createSession(move(conn));});
         server_->run();
     });
 
@@ -34,9 +34,11 @@ void P2PNode::run()
 {
     while(!end_)
     {
-        //TODO: get data from input
+        //Request = dataSource_->next();
+
         //TODO: send request
-        //TODO: return result
+
+        //dataSource_->send(response);
         sessionManager_.clearFinishedSessions();
         cout << "run " << sessionManager_.count() << " TCP session\n";
         sleep(1);

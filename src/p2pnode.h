@@ -25,11 +25,8 @@ private:
     //attribute indicate if proccess should finish
     static bool end_;
 
-    //TODO: data source
-
-    //TODO: data destination
-
-    //TODO: Routing table
+    //TODO: local
+    //DataSource dataSource_
 
     static void signalHandler(int signal);
 };

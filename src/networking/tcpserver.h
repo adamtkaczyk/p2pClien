@@ -14,7 +14,7 @@ class TcpServer
 public:
     using RegisterFunction = std::function<void(std::unique_ptr<TcpConnection>)>;
 
-    TcpServer(const short port, RegisterFunction registerConnection);
+    TcpServer(std::string ip, const short port, RegisterFunction registerConnection);
     //start TCP server
     void run() { ioContext_.run(); }
     //stop TCP server
