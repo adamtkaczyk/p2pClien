@@ -6,7 +6,7 @@ using namespace std;
 
 TcpConnection::TcpConnection(tcp::socket socket) : socket_(move(socket))
 {
-    cout << "New connection: " << getConnectionIdentifier()  << endl;
+    cout << "Create new TCP connection ip:port=[" << getConnectionIdentifier() << "]" << endl;
 }
 
 TcpConnection::~TcpConnection()
