@@ -12,7 +12,7 @@ int main()
     //create node object
     p2pNode = std::make_unique<P2PNode>(9876,9877);
     //register handler function
-    std::signal(SIGINT, [](int signal){ p2pNode->stop(signal); });
+    std::signal(SIGINT, [](const int signal){ p2pNode->stop(signal); });
     //run node
     p2pNode->run();
 

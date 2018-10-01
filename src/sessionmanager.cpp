@@ -19,7 +19,7 @@ SessionManager::~SessionManager()
 
 void SessionManager::createSession(std::unique_ptr<P2PConnection> connection)
 {
-    string key = connection->getConnectionIdentifier();
+    const string key = connection->getConnectionIdentifier();
 
     //create new task from connection
     auto task = [this, conn = move(connection)]() mutable { sessionTask(std::move(conn)); };

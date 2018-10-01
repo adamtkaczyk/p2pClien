@@ -8,7 +8,7 @@
 class P2PConnectionException : public std::runtime_error
 {
 public:
-    P2PConnectionException(std::string message) : std::runtime_error(message) {}
+    P2PConnectionException(const std::string message) : std::runtime_error(message) {}
 };
 
 class P2PConnection
@@ -16,13 +16,13 @@ class P2PConnection
 public:
     P2PConnection();
     //receive next P2PMessage
-    virtual std::unique_ptr<P2PMessage> receive() = 0;
+    virtual const std::unique_ptr<P2PMessage> receive() = 0;
     //send P2PMessage
-    virtual void send(std::unique_ptr<P2PMessage> message) = 0;
+    virtual void send(const std::unique_ptr<P2PMessage> message) = 0;
     //send simple text message
-    virtual void send(std::string message) = 0;
+    virtual void send(const std::string message) = 0;
     //get string which is unique for this connection
-    virtual std::string getConnectionIdentifier() = 0;
+    virtual const std::string getConnectionIdentifier() const = 0;
 };
 
 #endif // P2PCONNECTION_H

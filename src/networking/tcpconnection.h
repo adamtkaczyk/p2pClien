@@ -14,15 +14,15 @@ public:
     ~TcpConnection();
 
     //get connection socket
-    tcp::socket& getSocket() { return socket_; }
+    const tcp::socket& getSocket() { return socket_; }
     //receive next P2PMessage
-    virtual std::unique_ptr<P2PMessage> receive();
+    virtual const std::unique_ptr<P2PMessage> receive();
     //send P2PMessage
-    virtual void send(std::unique_ptr<P2PMessage> message);
+    virtual void send(const std::unique_ptr<P2PMessage> message);
     //send simple text message
-    virtual void send(std::string message);
+    virtual void send(const std::string message);
     //get string which is unique for this connection
-    virtual std::string getConnectionIdentifier();
+    virtual const std::string getConnectionIdentifier() const;
 private:
     tcp::socket socket_;
 };

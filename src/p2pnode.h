@@ -15,7 +15,7 @@ public:
 
     void run();
 
-    void stop(int signal);
+    void stop(const int signal);
 private:
     SessionManager sessionManager_;
     //Input remote connection server
@@ -24,11 +24,6 @@ private:
     std::thread serverThread_;
     //Input local connection server
     std::unique_ptr<TcpServer> localConnectionsServer_;
-    //attribute indicate if proccess should finish
-    static bool end_;
-
-    //TODO: local
-    //DataSource dataSource_
 };
 
 #endif // P2PNODE_H

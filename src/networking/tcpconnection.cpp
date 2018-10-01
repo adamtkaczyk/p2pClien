@@ -15,17 +15,17 @@ TcpConnection::~TcpConnection()
     cout << "Finish TCP Connection\n";
 }
 
-std::unique_ptr<P2PMessage> TcpConnection::receive()
+const std::unique_ptr<P2PMessage> TcpConnection::receive()
 {
     return nullptr;//make_unique<P2PMessage>();
 }
 
-void TcpConnection::send(std::unique_ptr<P2PMessage> message)
+void TcpConnection::send(const std::unique_ptr<P2PMessage> message)
 {
 
 }
 
-void TcpConnection::send(std::string message)
+void TcpConnection::send(const std::string message)
 {
     try
     {
@@ -37,7 +37,7 @@ void TcpConnection::send(std::string message)
     }
 }
 
-std::string TcpConnection::getConnectionIdentifier()
+const std::string TcpConnection::getConnectionIdentifier() const
 {
     return socket_.remote_endpoint().address().to_string() + ":" + std::to_string(socket_.remote_endpoint().port());
 }

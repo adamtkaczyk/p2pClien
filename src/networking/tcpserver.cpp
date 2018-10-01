@@ -6,7 +6,7 @@
 
 using namespace std;
 
-TcpServer::TcpServer(std::string ip, const short port, RegisterFunction registerConnection)
+TcpServer::TcpServer(const string ip, const short port, const RegisterFunction registerConnection)
     : acceptor_(ioContext_, tcp::endpoint(boost::asio::ip::address::from_string(ip),port)), regsiterConnection_(registerConnection)
 {
     startAccept();

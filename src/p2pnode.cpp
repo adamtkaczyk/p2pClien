@@ -5,8 +5,6 @@
 
 using namespace std;
 
-bool P2PNode::end_ = false;
-
 P2PNode::P2PNode(const short remoteConnectionsPort, const short localConnectionsPort)
 {
     auto registerFun = [this](std::unique_ptr<TcpConnection> conn) {sessionManager_.createSession(move(conn));};
@@ -31,7 +29,7 @@ void P2PNode::run()
     cout << "Finish P2PNode\n";
 }
 
-void P2PNode::stop(int signal)
+void P2PNode::stop(const int signal)
 {
     cout << "Stop P2PNode with signal: " << signal << endl;
     localConnectionsServer_->stop();
