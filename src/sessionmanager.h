@@ -23,6 +23,7 @@ private:
     void sessionThread(std::unique_ptr<P2PConnection> connection);
     //map of all running thread
     std::unordered_map<std::string,std::future<void>> openSessions_;
+    bool end_ = false;
 };
 
 #endif // SESSIONMANAGER_H

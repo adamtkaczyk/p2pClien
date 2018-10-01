@@ -7,14 +7,15 @@ using namespace std;
 
 bool P2PNode::end_ = false;
 
-P2PNode::P2PNode(const short port)
+P2PNode::P2PNode(const short remoteConnectionsPort, const short localConnectionsPort)
 {
-    serverThread_ = std::thread([this,port](){
-        server_ = make_unique<TcpServer>("0.0.0.0", port, [this](std::unique_ptr<TcpConnection> conn) {sessionManager_.createSession(move(conn));});
+    auto registerFun = [this](std::unique_ptr<TcpConnection> conn) {sessionManager_.createSession(move(conn));};
+    server_ = make_unique<TcpServer>("0.0.0.0", remoteConnectionsPort, registerFun);
+    serverThread_ = std::thread([this,remoteConnectionsPort](){
         server_->run();
     });
 
-    std::signal(SIGINT, P2PNode::signalHandler);
+    localConnectionsServer_ = make_unique<TcpServer>("127.0.0.1", localConnectionsPort, registerFun);
 }
 
 P2PNode::~P2PNode()
@@ -24,25 +25,14 @@ P2PNode::~P2PNode()
     serverThread_.join();
 }
 
-void P2PNode::signalHandler(int signal)
-{
-    cout << "Catch signal: " << signal << endl;
-    end_ = true;
-}
-
 void P2PNode::run()
 {
-    while(!end_)
-    {
-        //Request = dataSource_->next();
-
-        //TODO: send request
-
-        //dataSource_->send(response);
-        sessionManager_.clearFinishedSessions();
-        cout << "run " << sessionManager_.count() << " TCP session\n";
-        sleep(1);
-    }
-
+    localConnectionsServer_->run();
     cout << "Finish P2PNode\n";
+}
+
+void P2PNode::stop(int signal)
+{
+    cout << "Stop P2PNode with signal: " << signal << endl;
+    localConnectionsServer_->stop();
 }

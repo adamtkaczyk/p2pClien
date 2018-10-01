@@ -11,6 +11,7 @@ SessionManager::SessionManager()
 
 SessionManager::~SessionManager()
 {
+    end_ = true;
     cout << "Waiting for finishing all open session\n";
     for(auto& t : openSessions_)
         t.second.wait();
@@ -19,18 +20,25 @@ SessionManager::~SessionManager()
 void SessionManager::createSession(std::unique_ptr<P2PConnection> connection)
 {
     string key = connection->getConnectionIdentifier();
+
     //start new asyns task from connection
-    auto future = std::async(std::launch::async, [this, conn = move(connection)]() mutable { sessionThread(std::move(conn)); });
-    //save future result
-    openSessions_[key] = move(future);
+    auto task = [this, conn = move(connection)]() mutable { sessionThread(std::move(conn)); };
+    //save future result in map
+    openSessions_[key] = std::async(std::launch::async, move(task));
+
+    //clear old session from map
+    clearFinishedSessions();
 }
 
 void SessionManager::sessionThread(std::unique_ptr<P2PConnection> connection)
 {
-    for(int i = 0; i < 4; i++)
+    cout << "Start session: " << connection->getConnectionIdentifier() << endl;
+    std::unique_ptr<P2PMessage> message = nullptr;
+
+    do
     {
         //get input message from remote node
-        auto message = connection->receive();
+        std::unique_ptr<P2PMessage> message = connection->receive();
 
         //TODO: Process message
 
@@ -38,6 +46,8 @@ void SessionManager::sessionThread(std::unique_ptr<P2PConnection> connection)
         connection->send("Result message\n");
         sleep(5);
     }
+    while(message);
+    cout << "Session: " << connection->getConnectionIdentifier() << " has finished" << endl;
 }
 
 void SessionManager::clearFinishedSessions()
@@ -48,7 +58,7 @@ void SessionManager::clearFinishedSessions()
         //if session is finished remove from map
         if(session->second.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
         {
-            cout << "Found finished thread: " << session->first << endl;
+            cout << "Remove session: " << session->first << " from map" << endl;
             session = openSessions_.erase(session);
         }
         else

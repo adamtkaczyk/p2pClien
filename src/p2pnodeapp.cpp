@@ -5,10 +5,16 @@
 
 using namespace std;
 
+std::unique_ptr<P2PNode> p2pNode = nullptr;
+
 int main()
 {
-    P2PNode p2pNode{9876};
-    p2pNode.run();
+    //create node object
+    p2pNode = std::make_unique<P2PNode>(9876,9877);
+    //register handler function
+    std::signal(SIGINT, [](int signal){ p2pNode->stop(signal); });
+    //run node
+    p2pNode->run();
 
     return 0;
 }

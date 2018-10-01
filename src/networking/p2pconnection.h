@@ -5,6 +5,12 @@
 
 #include <memory>
 
+class P2PConnectionException : public std::runtime_error
+{
+public:
+    P2PConnectionException(std::string message) : std::runtime_error(message) {}
+};
+
 class P2PConnection
 {
 public:

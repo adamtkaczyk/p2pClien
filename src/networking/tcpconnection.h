@@ -20,7 +20,7 @@ public:
     //send P2PMessage
     virtual void send(std::unique_ptr<P2PMessage> message);
     //send simple text message
-    virtual void send(std::string message) { socket_.send(boost::asio::buffer(message)); }
+    virtual void send(std::string message);
     //get string which is unique for this connection
     virtual std::string getConnectionIdentifier();
 private:

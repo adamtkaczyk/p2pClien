@@ -17,12 +17,24 @@ TcpConnection::~TcpConnection()
 
 std::unique_ptr<P2PMessage> TcpConnection::receive()
 {
-    return make_unique<P2PMessage>();
+    return nullptr;//make_unique<P2PMessage>();
 }
 
 void TcpConnection::send(std::unique_ptr<P2PMessage> message)
 {
 
+}
+
+void TcpConnection::send(std::string message)
+{
+    try
+    {
+        socket_.send(boost::asio::buffer(message));
+    }
+    catch(boost::system::system_error& e)
+    {
+        throw P2PConnectionException(e.what());
+    }
 }
 
 std::string TcpConnection::getConnectionIdentifier()
