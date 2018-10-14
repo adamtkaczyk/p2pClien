@@ -6,19 +6,18 @@
 
 using namespace std;
 
-SessionManager::SessionManager()
-{
-}
-
 SessionManager::~SessionManager()
 {
-    cout << "Waiting for finishing all open session [" << openSessions_.size() << "]" << endl;
+    BOOST_LOG_TRIVIAL(info) << "Waiting for finishing all open session [" << openSessions_.size() << "]" << endl;
     for(auto& session : openSessions_)
         session.second.wait();
 }
 
 void SessionManager::createSession(std::unique_ptr<P2PConnection> connection)
 {
+    if(!connection)
+        return;
+
     const string key = connection->getConnectionIdentifier();
 
     //create new task from connection
@@ -32,7 +31,7 @@ void SessionManager::createSession(std::unique_ptr<P2PConnection> connection)
 
 void SessionManager::sessionTask(std::unique_ptr<P2PConnection> connection)
 {
-    cout << "Start session: " << connection->getConnectionIdentifier() << endl;
+    BOOST_LOG_TRIVIAL(info) << "Start session: " << connection->getConnectionIdentifier();
     std::unique_ptr<P2PMessage> message = nullptr;
 
     do
@@ -46,5 +45,5 @@ void SessionManager::sessionTask(std::unique_ptr<P2PConnection> connection)
         connection->send("Result message\n");
         sleep(5);
     } while(message);
-    cout << "Session: " << connection->getConnectionIdentifier() << " has finished" << endl;
+    BOOST_LOG_TRIVIAL(info) << "Session: " << connection->getConnectionIdentifier() << " has finished";
 }

@@ -1,18 +1,30 @@
 #include "tcpconnection.h"
+#include "boost/log/trivial.hpp"
 
 #include <iostream>
 
 using namespace std;
 
-TcpConnection::TcpConnection(tcp::socket socket) : socket_(move(socket))
+TcpConnection::TcpConnection(tcp::socket socket)
+    : socket_(move(socket)), ip_(socket_.remote_endpoint().address().to_string()), port_(socket_.remote_endpoint().port())
 {
-    cout << "Create new TCP connection ip:port=[" << getConnectionIdentifier() << "]" << endl;
+    BOOST_LOG_TRIVIAL(info) << "Create new TCP connection ip:port=[" << getConnectionIdentifier() << "]";
+}
+
+TcpConnection::TcpConnection(const std::string ip, const unsigned port) : ip_(ip), port_(port), socket_(ioService_)
+{
 }
 
 TcpConnection::~TcpConnection()
 {
     socket_.close();
-    cout << "Finish TCP Connection\n";
+    BOOST_LOG_TRIVIAL(info) << "Finish TCP Connection";
+}
+
+void TcpConnection::connect()
+{
+    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(ip_), port_);
+    socket_.connect(endpoint);
 }
 
 const std::unique_ptr<P2PMessage> TcpConnection::receive()
@@ -39,5 +51,5 @@ void TcpConnection::send(const std::string message)
 
 const std::string TcpConnection::getConnectionIdentifier() const
 {
-    return socket_.remote_endpoint().address().to_string() + ":" + std::to_string(socket_.remote_endpoint().port());
+    return ip_ + ":" + std::to_string(port_);
 }
