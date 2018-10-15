@@ -32,18 +32,26 @@ void SessionManager::createSession(std::unique_ptr<P2PConnection> connection)
 void SessionManager::sessionTask(std::unique_ptr<P2PConnection> connection)
 {
     BOOST_LOG_TRIVIAL(info) << "Start session: " << connection->getConnectionIdentifier();
-    std::unique_ptr<P2PMessage> message = nullptr;
+    std::shared_ptr<P2PMessage> message = nullptr;
 
     do
     {
         //get input message from remote node
-        std::unique_ptr<P2PMessage> message = connection->receive();
+        const std::shared_ptr<P2PMessage> message = connection->receive();
 
-        //TODO: Process message
+        const std::shared_ptr<P2PMessage> response = proccessMessage(message);
 
         //send result
-        connection->send("Result message\n");
+        connection->send(response);
         sleep(5);
     } while(message);
     BOOST_LOG_TRIVIAL(info) << "Session: " << connection->getConnectionIdentifier() << " has finished";
+}
+
+const shared_ptr<P2PMessage> SessionManager::proccessMessage(const shared_ptr<P2PMessage> message)
+{
+    if(message->getType() == P2PMessage::MESSAGE_TYPE::JOIN)
+        return P2PMessage::createJoinResponseMessage();
+
+    return nullptr;
 }

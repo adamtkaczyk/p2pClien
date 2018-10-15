@@ -16,9 +16,9 @@ class P2PConnection
 public:
     P2PConnection();
     //receive next P2PMessage
-    virtual const std::unique_ptr<P2PMessage> receive() = 0;
+    virtual const std::shared_ptr<P2PMessage> receive() = 0;
     //send P2PMessage
-    virtual void send(const std::unique_ptr<P2PMessage> message) = 0;
+    virtual void send(const std::shared_ptr<P2PMessage> message) = 0;
     //send simple text message
     virtual void send(const std::string message) = 0;
     //get string which is unique for this connection

@@ -33,6 +33,7 @@ public:
 private:
     //session thread
     void sessionTask(std::unique_ptr<P2PConnection> connection);
+    const std::shared_ptr<P2PMessage> proccessMessage(const std::shared_ptr<P2PMessage> message);
     //map of all future result of session
     std::unordered_map<std::string,std::future<void>> openSessions_;
     std::shared_ptr<RoutingTable> routingTable_;

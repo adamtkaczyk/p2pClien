@@ -23,18 +23,33 @@ TcpConnection::~TcpConnection()
 
 void TcpConnection::connect()
 {
-    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(ip_), port_);
-    socket_.connect(endpoint);
+    try
+    {
+        boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(ip_), port_);
+        socket_.connect(endpoint);
+    }
+    catch(boost::system::system_error& e)
+    {
+        throw P2PConnectionException(e.what());
+    }
 }
 
-const std::unique_ptr<P2PMessage> TcpConnection::receive()
+const std::shared_ptr<P2PMessage> TcpConnection::receive()
 {
-    return nullptr;//make_unique<P2PMessage>();
+    return nullptr;
 }
 
-void TcpConnection::send(const std::unique_ptr<P2PMessage> message)
+void TcpConnection::send(const std::shared_ptr<P2PMessage> message)
 {
-
+    try
+    {
+        if(message)
+            socket_.send(boost::asio::buffer(message->getValue()));
+    }
+    catch(boost::system::system_error& e)
+    {
+        throw P2PConnectionException(e.what());
+    }
 }
 
 void TcpConnection::send(const std::string message)

@@ -41,10 +41,19 @@ void P2PNode::initInputServers(const unsigned remoteConnectionsPort, const unsig
 
 void P2PNode::bootToNetwork(const std::string bootingNodeIp, const unsigned bootingNodePort)
 {
-    unique_ptr<TcpConnection> conn = make_unique<TcpConnection>(bootingNodeIp,bootingNodePort);
-    conn->connect();
-    conn->send("join");
-    conn->receive();
+    try
+    {
+        unique_ptr<TcpConnection> conn = make_unique<TcpConnection>(bootingNodeIp,bootingNodePort);
+        conn->connect();
+
+        conn->send(P2PMessage::createJoinMessage());
+        std::shared_ptr<P2PMessage> response = conn->receive();
+    }
+    catch(P2PConnectionException& e)
+    {
+        BOOST_LOG_TRIVIAL(error) << "Cannot connect to booting node [" << bootingNodeIp << ":" << bootingNodePort << "]: " << e.what();
+        throw std::runtime_error("Booting error");
+    }
 }
 
 void P2PNode::run()

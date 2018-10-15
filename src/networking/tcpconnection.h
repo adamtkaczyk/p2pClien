@@ -18,9 +18,9 @@ public:
     //get connection socket
     const tcp::socket& getSocket() { return socket_; }
     //receive next P2PMessage
-    virtual const std::unique_ptr<P2PMessage> receive() override;
+    virtual const std::shared_ptr<P2PMessage> receive() override;
     //send P2PMessage
-    virtual void send(const std::unique_ptr<P2PMessage> message) override;
+    virtual void send(const std::shared_ptr<P2PMessage> message) override;
     //send simple text message
     virtual void send(const std::string message) override;
     //get string which is unique for this connection
